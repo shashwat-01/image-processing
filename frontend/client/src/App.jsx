@@ -1,7 +1,6 @@
 import "./App.css";
+import Landing from "./layouts/Landing";
 
 export default function App() {
-  return (
-    <h1 className='text-3xl font-bold underline text-sky-500 '>Wawaweewa</h1>
-  );
+  return <Landing />;
 }
