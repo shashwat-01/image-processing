@@ -1,0 +1,22 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@font-face {
+  font-family: "Colfax";
+  src: url(./fonts/Colfax-Regular.otf) format(opentype);
+}
+
+@font-face {
+  font-family: "Bebas Neue";
+  src: url(./fonts/BebasNeue-Regular.ttf) format(truetype);
+}
+
+body {
+  font-family: "Colfax";
+}
+
+.quote-display {
+  font-family: "Bebas Neue";
+  /* font-size: 45px; */
+}
