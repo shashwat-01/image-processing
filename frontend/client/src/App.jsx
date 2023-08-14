@@ -1,6 +1,6 @@
 import "./App.css";
-import Landing from "./layouts/Landing";
+import Chat from "./layouts/Chat";
 
 export default function App() {
-  return <Landing />;
+  return <Chat />;
 }

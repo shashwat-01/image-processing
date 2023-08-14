@@ -1,0 +1,60 @@
+/* App.css */
+.bm-burger-button {
+  position: fixed;
+  width: 36px;
+  height: 30px;
+  left: 20px;
+  top: 20px;
+}
+
+.bm-burger-bars {
+  background: black;
+  /* border: none; */
+  border-radius: 2px;
+  width: 50px;
+  /* height: 0.5px; */
+  /* margin: 20px; */
+}
+
+.bm-burger-bars-hover {
+  background: #a90000;
+}
+
+.bm-cross-button {
+  height: 24px;
+  width: 24px;
+}
+
+.bm-cross {
+  background: #bdc3c7;
+}
+
+.bm-menu {
+  background: #fff;
+  padding: 2.5em 1.5em 0;
+  font-size: 1.15em;
+}
+
+.bm-menu-wrap {
+  position: fixed;
+  height: 100%;
+}
+
+.bm-morph-shape {
+  fill: #373a47;
+}
+
+.bm-item-list {
+  color: #000;
+  font-size: 23px;
+  padding: 1em;
+}
+
+.bm-item {
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.bm-overlay {
+  background: rgba(0, 0, 0, 0.3);
+}
