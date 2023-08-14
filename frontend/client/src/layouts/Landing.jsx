@@ -17,9 +17,9 @@ export default function Landing() {
               "linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%)",
           }}></div>
       </div>
-      <div className='w-2/3 flex flex-col'>
+      <div className='w-2/3 flex flex-col p-20 justify-between'>
         <div>
-          <img src='../src/assets/ziggy-logo.png' alt='' />
+          <img className='h-14' src='../src/assets/ziggy-logo.png' alt='' />
         </div>
         <MessageInput />
         <LandingPageQuotes />
