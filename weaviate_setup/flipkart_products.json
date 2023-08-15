@@ -1,0 +1,79 @@
+{
+    "class" : "FlipkartProducts",
+    "description" : "Flipkart Products",
+    "properties" : [
+        {
+            "name" : "image",
+            "dataType" : ["blob"],
+            "description" : "Image of the product"
+        },
+        {
+            "name" : "URL",
+            "dataType" : ["text"],
+            "description" : "URL of the product"
+        },
+        {
+            "name" : "Category",
+            "dataType" : ["text"],
+            "description" : "Category of the product"
+        },
+        {
+            "name" : "Brand",
+            "dataType" : ["text"],
+            "description" : "Brand of the product"
+        },
+        {
+            "name" : "Product",
+            "dataType" : ["text"],
+            "description" : "Name of the product"
+        },
+        {
+            "name" : "Price",
+            "dataType" : ["int"],
+            "description" : "Price of the product"
+        },
+        {
+            "name" : "Rating",
+            "dataType" : ["text"],
+            "description" : "Ratings of the product"
+        },
+        {
+            "name" : "NumberRatings",
+            "dataType" : ["int"],
+            "description" : "Number of ratings of the product"
+        },
+        {
+            "name" : "Colour",
+            "dataType" : ["text"],
+            "description" : "Colour of the product"
+        },
+        {
+            "name" : "Pattern",
+            "dataType" : ["text"],
+            "description" : "Pattern of the product"
+        },
+        {
+            "name" : "Fabric",
+            "dataType" : ["text"],
+            "description" : "Fabric of the product"
+        },
+        {
+            "name" : "Fit",
+            "dataType" : ["text"],
+            "description" : "Fit of the product"
+        },
+        {
+            "name" : "Type",
+            "dataType" : ["text"],
+            "description" : "Type of the product"
+        },
+        {
+            "name" : "Specification",
+            "dataType" : ["text"],
+            "description" : "Specification of the product"
+        }
+    ],
+    "vectorIndexConfig": {
+        "skip":true
+    }
+}

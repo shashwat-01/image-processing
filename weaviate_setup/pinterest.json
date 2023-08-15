@@ -1,0 +1,34 @@
+{
+    "class" : "PinterestImages",
+    "description" : "Pinterest Images",
+    "properties" : [
+        {
+            "name" : "category",
+            "dataType":["text"],
+            "description" : "Category of the image"
+        },
+        {
+            "name" : "description",
+            "dataType":["text"],
+            "description" : "Description of the image"
+        },
+        {
+            "name" : "image",
+            "dataType" : ["blob"],
+            "description" : "Full image"
+        },
+        {
+            "name" : "top",
+            "dataType":["PinterestTop"],
+            "description" : "Cross-referencing the top"
+        },
+        {
+            "name" : "bottom",
+            "dataType":["PinterestBottom"],
+            "description" : "Cross-referencing the bottom"
+        }
+    ],
+    "vectorIndexConfig": {
+        "skip":true
+    }
+}

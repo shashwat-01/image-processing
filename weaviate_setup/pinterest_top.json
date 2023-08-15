@@ -1,0 +1,14 @@
+{
+    "class" : "PinterestTop",
+    "description" : "Pinterest Top",
+    "properties" : [
+        {
+            "name" : "image",
+            "dataType" : ["blob"],
+            "description" : "Image of the segmented top"
+        }
+    ],
+    "vectorIndexConfig": {
+        "skip":true
+    }
+}
