@@ -1,0 +1,14 @@
+{
+    "class" : "PinterestBottom",
+    "description" : "Pinterest Bottom",
+    "properties" : [
+        {
+            "name" : "image",
+            "dataType" : ["blob"],
+            "description" : "Image of the segmented bottom"
+        }
+    ],
+    "vectorIndexConfig": {
+        "skip":true
+    }
+}
