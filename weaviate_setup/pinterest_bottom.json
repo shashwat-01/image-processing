@@ -7,8 +7,5 @@
             "dataType" : ["blob"],
             "description" : "Image of the segmented bottom"
         }
-    ],
-    "vectorIndexConfig": {
-        "skip":true
-    }
+    ]
 }

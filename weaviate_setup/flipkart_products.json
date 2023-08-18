@@ -72,8 +72,5 @@
             "dataType" : ["text"],
             "description" : "Specification of the product"
         }
-    ],
-    "vectorIndexConfig": {
-        "skip":true
-    }
+    ]
 }

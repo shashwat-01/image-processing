@@ -27,8 +27,5 @@
             "dataType":["PinterestBottom"],
             "description" : "Cross-referencing the bottom"
         }
-    ],
-    "vectorIndexConfig": {
-        "skip":true
-    }
+    ]
 }
