@@ -1,13 +1,35 @@
-export default function MessageInput({ textsize, setIsFieldEmpty }) {
+export default function MessageInput({
+  textsize,
+  setIsFieldEmpty,
+  handleKeyPress,
+  message,
+  setMessage, // Add this prop
+}) {
+  const sendMessage = () => {
+    if (message.trim() !== "") {
+      // You can handle the logic to send the message here
+
+      // Reset the input
+      setMessage("");
+    }
+  };
+
   return (
     <div className='w-full'>
       <form>
         <div className='flex border-b-2 border-gray-600 border-solid py-2'>
           <textarea
             name='prompt'
+            value={message}
             onChange={(e) => {
-              if (e.target.value === "") setIsFieldEmpty(true);
-              else setIsFieldEmpty(false);
+              setMessage(e.target.value);
+              setIsFieldEmpty(e.target.value === "");
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleKeyPress(e);
+              }
             }}
             id=''
             cols='1'
@@ -18,7 +40,12 @@ export default function MessageInput({ textsize, setIsFieldEmpty }) {
               fontSize: `${textsize}`,
             }}
             placeholder='What vibe are you feeling today?'></textarea>
-          <button type='submit'>
+          <button
+            type='button'
+            onClick={(e) => {
+              e.preventDefault();
+              sendMessage();
+            }}>
             <img src='../src/assets/submit-arrow.svg' alt='' />
           </button>
         </div>
