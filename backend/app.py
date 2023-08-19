@@ -28,8 +28,8 @@ def getQuery():
 
 	embedding = h.getTextEmbeddings(query)
 	top_embedding , bottom_embedding = h.getTopAndBottomEmbeddings(embedding)
-	top_products = h.getProducts(top_embedding)
-	bottom_products = h.getProducts(bottom_embedding)
+	top_products = h.getProducts(top_embedding, "Girls", "Tops")
+	bottom_products = h.getProducts(bottom_embedding, "Girls", "Bottoms")
 	ranking_top = h.getRanking(embedding.tolist()[0] , top_products["data"]["Get"]["FlipkartNoSegProducts"] , "Female Profile 1 Top") 
 	ranking_bottom = h.getRanking(embedding.tolist()[0] , bottom_products["data"]["Get"]["FlipkartNoSegProducts"] , "Female Profile 1 Bottom") 
 

@@ -83,8 +83,6 @@ def reciprocal_rank_fusion(combine_tuples, weights):
         rrf_rank[i] = rank
     return rrf_rank
 
-
-
 def getTextEmbeddings(text):
 	inputs = processor(text=text , images=Image.new('RGB' , (72 , 72)), return_tensors="pt", padding=True)
 	outputs = model(**inputs , return_dict=True)
@@ -104,16 +102,20 @@ def getTopAndBottomEmbeddings(embeddings):
 
 	return top_embedding , bottom_embedding
 
-def getProducts(embedding):
+def getProducts(embedding, gender, wear):
 	return (
     client.query
     .get("FlipkartNoSegProducts",["uRL", "brand", "category", "product", "price", "rating", "numberRatings", "colour", "brand", "image", "fit", "type"])
     .with_near_vector({"vector" : embedding})
+    .with_where({
+        "path" : ["category"],
+        "operator" : "Equal",
+        "valueText" : f"{gender} {wear}"
+    })
     .with_additional(["vector"])
     .with_limit(12)
     .do()
 	)
-
 
 def weightedMeanPoolTopEmbeddings(response , embeddings):
 	list_of_embeddings = []
