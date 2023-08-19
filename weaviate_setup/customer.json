@@ -1,0 +1,26 @@
+{
+    "class" : "Customer_Profile",
+    "description" : "Customer Profile",
+    "properties" : [
+        {
+            "name" : "name",
+            "dataType" : ["text"],
+            "description" : "Name of the customer"
+        },
+        {
+            "name" : "gender",
+            "dataType" : ["text"],
+            "description" : "Gender of the customer"
+        },
+        {
+            "name" : "age",
+            "dataType" : ["text"],
+            "description" : "Brand of the product"
+        },
+        {
+            "name" : "category",
+            "dataType" : ["text"],
+            "description" : "Top or Bottom"
+        }
+    ]
+}
