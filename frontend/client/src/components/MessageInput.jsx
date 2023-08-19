@@ -1,25 +1,24 @@
+import React, { useRef } from "react";
+
 export default function MessageInput({
   textsize,
   setIsFieldEmpty,
   handleKeyPress,
+  handleSendBtnPress,
   message,
-  setMessage, // Add this prop
+  setMessage,
+  disableInput,
 }) {
-  const sendMessage = () => {
-    if (message.trim() !== "") {
-      // You can handle the logic to send the message here
-
-      // Reset the input
-      setMessage("");
-    }
-  };
+  const textareaRef = useRef(null);
 
   return (
     <div className='w-full'>
       <form>
         <div className='flex border-b-2 border-gray-600 border-solid py-2'>
           <textarea
+            ref={textareaRef} // Attach the ref to the textarea
             name='prompt'
+            disabled={disableInput}
             value={message}
             onChange={(e) => {
               setMessage(e.target.value);
@@ -42,10 +41,8 @@ export default function MessageInput({
             placeholder='What vibe are you feeling today?'></textarea>
           <button
             type='button'
-            onClick={(e) => {
-              e.preventDefault();
-              sendMessage();
-            }}>
+            onClick={handleSendBtnPress}
+            disabled={disableInput}>
             <img src='../src/assets/submit-arrow.svg' alt='' />
           </button>
         </div>

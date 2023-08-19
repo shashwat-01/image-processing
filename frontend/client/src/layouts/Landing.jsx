@@ -2,42 +2,80 @@ import { useState, useEffect, useRef } from "react";
 import LandingPageQuotes from "../components/LandingPageQuotes";
 import MessageInput from "../components/MessageInput";
 
-//image urls
-// const userdp = require("./assets/user-dp.png");
-// const chatdp = require("./assets/ziggy-bot.png");
-
 export default function Landing() {
-  const [isFieldEmpty, setIsFieldEmpty] = useState(true);
-  //To store chat history
-  const [chatHistory, setChatHistory] = useState([]);
-  //Toggle user
-  const [currentUser, setCurrentUser] = useState("user");
+  const botResponses = [
+    "Hello! How may I help you?",
+    "Sure thing! What can I assist you with?",
+    "Hi there! Feel free to ask me anything.",
+    "Greetings! What's on your mind?",
+  ];
 
+  const getBotResponse = () => {
+    const randomIndex = Math.floor(Math.random() * botResponses.length);
+    return botResponses[randomIndex];
+  };
+
+  const [isFieldEmpty, setIsFieldEmpty] = useState(true);
+  const [chatHistory, setChatHistory] = useState([]);
   const [message, setMessage] = useState("");
+  const [isWaitingForBot, setIsWaitingForBot] = useState(false);
 
   const chatContainerRef = useRef(null);
 
-  console.log(chatHistory);
-
-  const sendMessage = () => {
-    if (message.trim() !== "") {
-      //if the input is not empty, append the current input to the chat history along with the user and message
-      setChatHistory([...chatHistory, { user: currentUser, message }]);
-
-      // Reset the input and switch users
-      setMessage("");
-      setCurrentUser(currentUser === "user" ? "bot" : "user"); // Switch users
-    }
+  const sendMessage = (text, user) => {
+    setChatHistory((prevChatHistory) => [
+      ...prevChatHistory,
+      {
+        user,
+        message: text,
+      },
+    ]);
   };
+
+  // const handleUserMessage = (text) => {
+  //   sendMessage(text, "user");
+  //   setTimeout(() => {
+  //     const botMessage = getBotResponse();
+  //     sendMessage(botMessage, "bot");
+  //   }, 500); // Simulating a bot response after a short delay
+  // };
 
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      sendMessage();
+      if (message.trim() !== "") {
+        console.log(message);
+        sendMessage(message, "user"); // Send user message to chatHistory
+        setMessage("");
+        setIsWaitingForBot(true); // Activate waiting for bot
+
+        // Simulate bot response after a delay
+        setTimeout(() => {
+          const botMessage = getBotResponse();
+          console.log(botMessage);
+          sendMessage(botMessage, "bot"); // Send bot response to chatHistory
+          setIsWaitingForBot(false);
+        }, 1000); // Adjust the delay as needed
+      }
     }
   };
 
-  //scroll down to the bottom of the chat container when the chat history changes
+  const handleSendBtnPress = (event) => {
+    event.preventDefault();
+    if (message.trim() !== "") {
+      console.log(message);
+      sendMessage(message, "user"); // Send user message to chatHistory
+      setMessage("");
+
+      // Simulate bot response after a delay
+      setTimeout(() => {
+        const botMessage = getBotResponse();
+        console.log(botMessage);
+        sendMessage(botMessage, "bot"); // Send bot response to chatHistory
+      }, 9000); // Adjust the delay as needed
+    }
+  };
+
   useEffect(() => {
     if (chatHistory.length > 0)
       chatContainerRef.current.scrollTop =
@@ -47,7 +85,7 @@ export default function Landing() {
   return (
     <div className='flex flex-row h-screen'>
       {isFieldEmpty && chatHistory.length === 0 && (
-        <div div className='relative w-1/3 h-full'>
+        <div className='relative w-1/3 h-full'>
           <img
             className='w-full h-full object-cover'
             src='../src/assets/landing-left-1.jpg'
@@ -59,6 +97,14 @@ export default function Landing() {
               background:
                 "linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%)",
             }}></div>
+          <div className='absolute bottom-5 right-8 flex gap-2 items-center border-2 border-transparent border-opacity-50 text-white font-semibold cursor-pointer hover:border-b-2 hover:border-b-white transition duration-200'>
+            <button>Try this look</button>
+            <img
+              src='../src/assets/external_link.png'
+              alt=''
+              className='h-3 w-3'
+            />
+          </div>
         </div>
       )}
       <div
@@ -103,8 +149,10 @@ export default function Landing() {
           textsize={isFieldEmpty && chatHistory.length === 0 ? "30px" : "20px"}
           setIsFieldEmpty={setIsFieldEmpty}
           handleKeyPress={handleKeyPress}
+          handleSendBtnPress={handleSendBtnPress}
           message={message}
           setMessage={setMessage}
+          disableInput={isWaitingForBot}
         />
         {isFieldEmpty && chatHistory.length === 0 && <LandingPageQuotes />}
       </div>
