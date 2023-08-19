@@ -1,0 +1,12 @@
+#chat_container {
+  -ms-overflow-style: none;
+  /* background-color: red; */
+  width: 100%;
+  height: 100%;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+}
+
+#chat_container::-webkit-scrollbar {
+  display: none;
+}
