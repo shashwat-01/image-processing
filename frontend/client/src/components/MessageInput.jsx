@@ -7,6 +7,7 @@ export default function MessageInput({
   handleSendBtnPress,
   message,
   setMessage,
+  disableInput,
 }) {
   const textareaRef = useRef(null);
 
@@ -17,6 +18,7 @@ export default function MessageInput({
           <textarea
             ref={textareaRef} // Attach the ref to the textarea
             name='prompt'
+            disabled={disableInput}
             value={message}
             onChange={(e) => {
               setMessage(e.target.value);
@@ -37,7 +39,10 @@ export default function MessageInput({
               fontSize: `${textsize}`,
             }}
             placeholder='What vibe are you feeling today?'></textarea>
-          <button type='button' onClick={handleSendBtnPress}>
+          <button
+            type='button'
+            onClick={handleSendBtnPress}
+            disabled={disableInput}>
             <img src='../src/assets/submit-arrow.svg' alt='' />
           </button>
         </div>

@@ -3,52 +3,79 @@ import LandingPageQuotes from "../components/LandingPageQuotes";
 import MessageInput from "../components/MessageInput";
 
 export default function Landing() {
+  const botResponses = [
+    "Hello! How may I help you?",
+    "Sure thing! What can I assist you with?",
+    "Hi there! Feel free to ask me anything.",
+    "Greetings! What's on your mind?",
+  ];
+
+  const getBotResponse = () => {
+    const randomIndex = Math.floor(Math.random() * botResponses.length);
+    return botResponses[randomIndex];
+  };
+
   const [isFieldEmpty, setIsFieldEmpty] = useState(true);
-  //To store chat history
-  // const [chatHistory, setChatHistory] = useState([]);
   const [chatHistory, setChatHistory] = useState([]);
-
-  //Toggle user
-  const [currentUser, setCurrentUser] = useState("user");
-
   const [message, setMessage] = useState("");
+  const [isWaitingForBot, setIsWaitingForBot] = useState(false);
 
   const chatContainerRef = useRef(null);
 
-  const sendMessage = () => {
-    if (message.trim() !== "") {
-      //if the input is not empty, append the current input to the chat history along with the user and message
-      setChatHistory([
-        ...chatHistory,
-        {
-          user: currentUser,
-          message: {
-            dumms: "Hi",
-            message: message,
-          },
-        },
-      ]);
-      // Reset the input and switch users
-      setMessage("");
-      setCurrentUser(currentUser === "user" ? "bot" : "user"); // Switch users
-    }
+  const sendMessage = (text, user) => {
+    setChatHistory((prevChatHistory) => [
+      ...prevChatHistory,
+      {
+        user,
+        message: text,
+      },
+    ]);
   };
 
-  console.log(chatHistory);
+  // const handleUserMessage = (text) => {
+  //   sendMessage(text, "user");
+  //   setTimeout(() => {
+  //     const botMessage = getBotResponse();
+  //     sendMessage(botMessage, "bot");
+  //   }, 500); // Simulating a bot response after a short delay
+  // };
 
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      sendMessage();
+      if (message.trim() !== "") {
+        console.log(message);
+        sendMessage(message, "user"); // Send user message to chatHistory
+        setMessage("");
+        setIsWaitingForBot(true); // Activate waiting for bot
+
+        // Simulate bot response after a delay
+        setTimeout(() => {
+          const botMessage = getBotResponse();
+          console.log(botMessage);
+          sendMessage(botMessage, "bot"); // Send bot response to chatHistory
+          setIsWaitingForBot(false);
+        }, 1000); // Adjust the delay as needed
+      }
     }
   };
 
   const handleSendBtnPress = (event) => {
     event.preventDefault();
-    sendMessage();
+    if (message.trim() !== "") {
+      console.log(message);
+      sendMessage(message, "user"); // Send user message to chatHistory
+      setMessage("");
+
+      // Simulate bot response after a delay
+      setTimeout(() => {
+        const botMessage = getBotResponse();
+        console.log(botMessage);
+        sendMessage(botMessage, "bot"); // Send bot response to chatHistory
+      }, 9000); // Adjust the delay as needed
+    }
   };
 
-  //scroll down to the bottom of the chat container when the chat history changes
   useEffect(() => {
     if (chatHistory.length > 0)
       chatContainerRef.current.scrollTop =
@@ -113,7 +140,7 @@ export default function Landing() {
                   }
                   alt=''
                 />
-                <div>{chat.message.message}</div>
+                <div>{chat.message}</div>
               </div>
             ))}
           </div>
@@ -125,6 +152,7 @@ export default function Landing() {
           handleSendBtnPress={handleSendBtnPress}
           message={message}
           setMessage={setMessage}
+          disableInput={isWaitingForBot}
         />
         {isFieldEmpty && chatHistory.length === 0 && <LandingPageQuotes />}
       </div>
