@@ -34,27 +34,27 @@ def getQuery():
 	ranking_bottom = h.getRanking(embedding.tolist()[0] , bottom_products["data"]["Get"]["FlipkartNoSegProducts"] , "Female Profile 1 Bottom") 
 
 	top3top  = []
-	for i in range(3):
-		top3top.append(top_products["data"]["Get"]["FlipkartNoSegProducts"][i])
+	# for i in range(3):
+	# 	top3top.append(top_products["data"]["Get"]["FlipkartNoSegProducts"][i])
 	# make it a different function
-	# for key, value in ranking_top.items():
-	# 	try:
-	# 		if key == 3: break
-	# 		top3top.append(top_products["data"]["Get"]["FlipkartNoSegProducts"][value])
+	for key, value in ranking_top.items():
+		try:
+			if key == 3: break
+			top3top.append(top_products["data"]["Get"]["FlipkartNoSegProducts"][value])
 			
-	# 	except:
-	# 		pass
+		except:
+			pass
 
 	top3bottom  = []
-	for i in range(3):
-		top3bottom.append(bottom_products["data"]["Get"]["FlipkartNoSegProducts"][i])
-	# for key, value in ranking_top.items():
-	# 	try:
-	# 		if key == 3: break
-	# 		top3bottom.append(bottom_products["data"]["Get"]["FlipkartNoSegProducts"][value])
+	# for i in range(3):
+	# 	top3bottom.append(bottom_products["data"]["Get"]["FlipkartNoSegProducts"][i])
+	for key, value in ranking_top.items():
+		try:
+			if key == 3: break
+			top3bottom.append(bottom_products["data"]["Get"]["FlipkartNoSegProducts"][value])
 			
-	# 	except:
-	# 		pass
+		except:
+			pass
 	
 	response = {
 		"message" : "Here are some outfits for you!",
@@ -62,7 +62,7 @@ def getQuery():
 
 	outfits = []
 	gender = "female"
-	for i in range(3):
+	for i in range(min(len(top3bottom) , len(top3top))):
 		top_title = top3top[i]["product"]
 		bottom_title = top3bottom[i]["product"]
 		outfit = {
