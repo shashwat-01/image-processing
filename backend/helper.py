@@ -6,9 +6,7 @@ from transformers import CLIPProcessor, CLIPModel
 import numpy as np
 from weaviate.util import generate_uuid5
 
-client = weaviate.Client(url="https://2cd4-182-79-4-252.ngrok-free.app")
-
-
+client = weaviate.Client(url="http://localhost:8080")
 
 checkpoint = "patrickjohncyh/fashion-clip"
 
@@ -88,12 +86,17 @@ def getTextEmbeddings(text):
 	outputs = model(**inputs , return_dict=True)
 	return outputs["text_embeds"]
 
-def getTopAndBottomEmbeddings(embeddings):
+def getTopAndBottomEmbeddings(embeddings, gender):
 	response = (
     client.query
     .get("PinterestImages", [ "top {... on PinterestTop {_additional {vector} }}" , "bottom {... on PinterestBottom { _additional {vector} }}"])
     .with_near_vector({"vector" : embeddings.tolist()[0]})
     .with_additional(["vector"])
+    .with_where({
+        "path" : ["category"],
+        "operator" : "Like",
+        "valueText" : gender
+    })
     .with_limit(5)
     .do())
 
