@@ -10,9 +10,28 @@ export default function Landing() {
     "Greetings! What's on your mind?",
   ];
 
-  const getBotResponse = () => {
-    const randomIndex = Math.floor(Math.random() * botResponses.length);
-    return botResponses[randomIndex];
+  // const getBotResponse = () => {
+  //   const randomIndex = Math.floor(Math.random() * botResponses.length);
+  //   return botResponses[randomIndex];
+  // };
+
+  const getBotResponse = async (userMessage) => {
+    const response = await fetch("/query", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: userMessage,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    const data = await response.json();
+    return data.message; // Assuming your API sends back a response message
   };
 
   const [isFieldEmpty, setIsFieldEmpty] = useState(true);
@@ -22,7 +41,7 @@ export default function Landing() {
 
   const chatContainerRef = useRef(null);
 
-  const sendMessage = (text, user) => {
+  const addMessageToHistory = (text, user) => {
     setChatHistory((prevChatHistory) => [
       ...prevChatHistory,
       {
@@ -32,49 +51,82 @@ export default function Landing() {
     ]);
   };
 
-  // const handleUserMessage = (text) => {
-  //   sendMessage(text, "user");
-  //   setTimeout(() => {
-  //     const botMessage = getBotResponse();
-  //     sendMessage(botMessage, "bot");
-  //   }, 500); // Simulating a bot response after a short delay
-  // };
-
-  const handleKeyPress = (event) => {
+  const handleKeyPress = async (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
       if (message.trim() !== "") {
         console.log(message);
-        sendMessage(message, "user"); // Send user message to chatHistory
+        addMessageToHistory(message, "user");
         setMessage("");
-        setIsWaitingForBot(true); // Activate waiting for bot
+        setIsWaitingForBot(true);
 
-        // Simulate bot response after a delay
-        setTimeout(() => {
-          const botMessage = getBotResponse();
+        try {
+          const botMessage = await getBotResponse(message);
           console.log(botMessage);
-          sendMessage(botMessage, "bot"); // Send bot response to chatHistory
-          setIsWaitingForBot(false);
-        }, 1000); // Adjust the delay as needed
+          addMessageToHistory(botMessage, "bot");
+        } catch (error) {
+          console.error("Error fetching bot response:", error);
+          addMessageToHistory("Something went wrong", "bot");
+        }
+
+        setIsWaitingForBot(false);
       }
     }
   };
 
-  const handleSendBtnPress = (event) => {
+  const handleSendBtnPress = async (event) => {
     event.preventDefault();
     if (message.trim() !== "") {
       console.log(message);
-      sendMessage(message, "user"); // Send user message to chatHistory
+      addMessageToHistory(message, "user");
       setMessage("");
 
-      // Simulate bot response after a delay
-      setTimeout(() => {
-        const botMessage = getBotResponse();
+      try {
+        const botMessage = await getBotResponse(message);
         console.log(botMessage);
-        sendMessage(botMessage, "bot"); // Send bot response to chatHistory
-      }, 9000); // Adjust the delay as needed
+        addMessageToHistory(botMessage, "bot");
+      } catch (error) {
+        console.error("Error fetching bot response:", error);
+        addMessageToHistory("Something went wrong", "bot");
+      }
     }
   };
+
+  // const handleKeyPress = (event) => {
+  //   if (event.key === "Enter") {
+  //     event.preventDefault();
+  //     if (message.trim() !== "") {
+  //       console.log(message);
+  //       addMessageToHistory(message, "user"); // Send user message to chatHistory
+  //       setMessage("");
+  //       setIsWaitingForBot(true); // Activate waiting for bot
+
+  //       // Simulate bot response after a delay
+  //       setTimeout(() => {
+  //         const botMessage = getBotResponse();
+  //         console.log(botMessage);
+  //         addMessageToHistory(botMessage, "bot"); // Send bot response to chatHistory
+  //         setIsWaitingForBot(false);
+  //       }, 1000); // Adjust the delay as needed
+  //     }
+  //   }
+  // };
+
+  // const handleSendBtnPress = (event) => {
+  //   event.preventDefault();
+  //   if (message.trim() !== "") {
+  //     console.log(message);
+  //     addMessageToHistory(message, "user"); // Send user message to chatHistory
+  //     setMessage("");
+
+  //     // Simulate bot response after a delay
+  //     setTimeout(() => {
+  //       const botMessage = getBotResponse();
+  //       console.log(botMessage);
+  //       addMessageToHistory(botMessage, "bot"); // Send bot response to chatHistory
+  //     }, 9000); // Adjust the delay as needed
+  //   }
+  // };
 
   useEffect(() => {
     if (chatHistory.length > 0)
