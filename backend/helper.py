@@ -88,12 +88,17 @@ def getTextEmbeddings(text):
 	outputs = model(**inputs , return_dict=True)
 	return outputs["text_embeds"]
 
-def getTopAndBottomEmbeddings(embeddings):
+def getTopAndBottomEmbeddings(embeddings, gender):
 	response = (
     client.query
     .get("PinterestImages", [ "top {... on PinterestTop {_additional {vector} }}" , "bottom {... on PinterestBottom { _additional {vector} }}"])
     .with_near_vector({"vector" : embeddings.tolist()[0]})
     .with_additional(["vector"])
+    .with_where({
+        "path" : ["category"],
+        "operator" : "Like",
+        "valueText" : gender
+    })
     .with_limit(5)
     .do())
 

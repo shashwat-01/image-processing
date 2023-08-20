@@ -23,8 +23,7 @@ CORS(app )
 @app.route('/query', methods=['POST'])
 def getQuery():
 	query = request.json['query']
-
-	#get TextEmbeddings
+	profile = request.json['profile']
 
 	embedding = h.getTextEmbeddings(query)
 	top_embedding , bottom_embedding = h.getTopAndBottomEmbeddings(embedding)
@@ -34,9 +33,6 @@ def getQuery():
 	ranking_bottom = h.getRanking(embedding.tolist()[0] , bottom_products["data"]["Get"]["FlipkartSegProducts"] , "Female Profile 1 Bottom") 
 
 	top3top  = []
-	# for i in range(3):
-	# 	top3top.append(top_products["data"]["Get"]["FlipkartNoSegProducts"][i])
-	# make it a different function
 	for key, value in ranking_top.items():
 		try:
 			if key == 3: break
@@ -46,8 +42,6 @@ def getQuery():
 			pass
 
 	top3bottom  = []
-	# for i in range(3):
-	# 	top3bottom.append(bottom_products["data"]["Get"]["FlipkartNoSegProducts"][i])
 	for key, value in ranking_top.items():
 		try:
 			if key == 3: break
@@ -73,9 +67,6 @@ def getQuery():
 		outfits.append(outfit)
 
 	response["outfits"] = outfits
-
-	
-
 	return jsonify(response)
 
 
