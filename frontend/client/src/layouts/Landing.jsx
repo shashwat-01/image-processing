@@ -12,6 +12,13 @@ export default function Landing() {
     "Greetings! What's on your mind?",
   ];
 
+  //users: Harry, Ginny, Ron, Hermione
+  const [selectedUserProfile, setSelectedUserProfile] = useState("Harry"); // Set default value to "yellow"
+
+  const handleColorChange = (event) => {
+    setSelectedUserProfile(event.target.value); // Update the selected color when the user selects an option
+  };
+
   // const getBotResponse = () => {
   //   const randomIndex = Math.floor(Math.random() * botResponses.length);
   //   return botResponses[randomIndex];
@@ -81,7 +88,7 @@ export default function Landing() {
         setIsWaitingForBot(true); // Activate waiting for bot
 
         const res = await axios.post(
-          "http://127.0.0.1:5000/query",
+          "http://5851-136-233-9-98.ngrok-free.app/query",
           { query: message },
           {
             headers: {
@@ -192,9 +199,23 @@ export default function Landing() {
       <div
         className={
           isFieldEmpty && chatHistory.length === 0
-            ? "w-full flex flex-col p-20 justify-between"
+            ? "w-full flex flex-col p-20 justify-between relative"
             : "w-full flex flex-col p-10 justify-between"
         }>
+        {isFieldEmpty && chatHistory.length === 0 && (
+          <div className='text-xl absolute top-10 right-10'>
+            Hi
+            <select
+              value={selectedUserProfile}
+              onChange={handleColorChange}
+              className='font-bold focus:outline-none cursor-pointer rounded-none px-1 py-2 transition duration-300 ease-in-out transform hover:bg-white hover:text-black'>
+              <option value='Harry'>Harry</option>
+              <option value='Hermione'>Hermione</option>
+              <option value='Ron'>Ron</option>
+              <option value='Hermione'>Hermione</option>
+            </select>
+          </div>
+        )}
         <div>
           <img
             className={
