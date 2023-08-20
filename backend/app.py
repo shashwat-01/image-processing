@@ -17,8 +17,7 @@ from flask_cors import CORS
 
 
 app = flask.Flask(__name__)
-
-CORS(app)
+CORS(app )
 
 
 @app.route('/query', methods=['POST'])
@@ -31,8 +30,8 @@ def getQuery():
 	top_embedding , bottom_embedding = h.getTopAndBottomEmbeddings(embedding)
 	top_products = h.getProducts(top_embedding, "Girls", "Tops")
 	bottom_products = h.getProducts(bottom_embedding, "Girls", "Bottoms")
-	ranking_top = h.getRanking(embedding.tolist()[0] , top_products["data"]["Get"]["FlipkartNoSegProducts"] , "Female Profile 1 Top") 
-	ranking_bottom = h.getRanking(embedding.tolist()[0] , bottom_products["data"]["Get"]["FlipkartNoSegProducts"] , "Female Profile 1 Bottom") 
+	ranking_top = h.getRanking(embedding.tolist()[0] , top_products["data"]["Get"]["FlipkartSegProducts"] , "Female Profile 1 Top") 
+	ranking_bottom = h.getRanking(embedding.tolist()[0] , bottom_products["data"]["Get"]["FlipkartSegProducts"] , "Female Profile 1 Bottom") 
 
 	top3top  = []
 	# for i in range(3):
@@ -41,7 +40,7 @@ def getQuery():
 	for key, value in ranking_top.items():
 		try:
 			if key == 3: break
-			top3top.append(top_products["data"]["Get"]["FlipkartNoSegProducts"][value])
+			top3top.append(top_products["data"]["Get"]["FlipkartSegProducts"][value])
 			
 		except:
 			pass
@@ -52,7 +51,7 @@ def getQuery():
 	for key, value in ranking_top.items():
 		try:
 			if key == 3: break
-			top3bottom.append(bottom_products["data"]["Get"]["FlipkartNoSegProducts"][value])
+			top3bottom.append(bottom_products["data"]["Get"]["FlipkartSegProducts"][value])
 			
 		except:
 			pass

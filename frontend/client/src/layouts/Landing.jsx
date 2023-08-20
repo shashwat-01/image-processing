@@ -154,10 +154,14 @@ export default function Landing() {
                 src="../src/assets/ziggy-bot.png"
                 alt=''
               />
+              <div>
               <div>{chat.message.message}</div>
+              <div  className="flex flex-row gap-8 my-3">
               {
-                chat.message.outfits.map((outfit, index) => (<Outfit outfit={outfit } />))
+                chat.message.outfits.map((outfit, index) => (<Outfit outfit={outfit } key={index}/>))
             }
+              </div>
+              </div>
             </div>
           )
             

@@ -40,13 +40,14 @@
   padding: 15px;
   margin: 10px 0;
   display: flex;
-  gap: 10px;
-  align-items: center;
+  gap: 20px;
+  align-items: flex-start;
   font-size: 20px;
 }
 
 .bot {
   background-color: #efefef;
+
 }
 
 .input-container {
@@ -61,4 +62,14 @@ input {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 49; /* Ensure the overlay is below the modal */
 }
