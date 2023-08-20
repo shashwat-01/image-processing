@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import LandingPageQuotes from "../components/LandingPageQuotes";
 import MessageInput from "../components/MessageInput";
+import axios from "axios";
+import Outfit from "./Outfit";
 
 export default function Landing() {
   const botResponses = [
@@ -10,9 +12,28 @@ export default function Landing() {
     "Greetings! What's on your mind?",
   ];
 
-  const getBotResponse = () => {
-    const randomIndex = Math.floor(Math.random() * botResponses.length);
-    return botResponses[randomIndex];
+  // const getBotResponse = () => {
+  //   const randomIndex = Math.floor(Math.random() * botResponses.length);
+  //   return botResponses[randomIndex];
+  // };
+
+  const getBotResponse = async (userMessage) => {
+    const response = await fetch("/query", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: userMessage,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    const data = await response.json();
+    return data.message; // Assuming your API sends back a response message
   };
 
   const [isFieldEmpty, setIsFieldEmpty] = useState(true);
@@ -22,7 +43,7 @@ export default function Landing() {
 
   const chatContainerRef = useRef(null);
 
-  const sendMessage = (text, user) => {
+  const addMessageToHistory = (text, user) => {
     setChatHistory((prevChatHistory) => [
       ...prevChatHistory,
       {
@@ -40,41 +61,92 @@ export default function Landing() {
   //   }, 500); // Simulating a bot response after a short delay
   // };
 
-  const handleKeyPress = (event) => {
+  const handleKeyPress = async (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
       if (message.trim() !== "") {
         console.log(message);
-        sendMessage(message, "user"); // Send user message to chatHistory
+        addMessageToHistory(message, "user");
         setMessage("");
         setIsWaitingForBot(true); // Activate waiting for bot
 
+        const res = await axios.post(
+          "http://127.0.0.1:5000/query",
+          { query: message },
+          {
+            headers: {
+              "Content-type": "application/json",
+              Accept: "application/json",
+            },
+          }
+        );
+        sendMessage(res.data, "bot"); // Send bot response to chatHistory
+        setIsWaitingForBot(false); // Deactivate waiting for bot
+
         // Simulate bot response after a delay
-        setTimeout(() => {
-          const botMessage = getBotResponse();
-          console.log(botMessage);
-          sendMessage(botMessage, "bot"); // Send bot response to chatHistory
-          setIsWaitingForBot(false);
-        }, 1000); // Adjust the delay as needed
+        // setTimeout(() => {
+        //   const botMessage = getBotResponse();
+        //   console.log(botMessage);
+        //   sendMessage(botMessage, "bot"); // Send bot response to chatHistory
+        //   setIsWaitingForBot(false);
+        // }, 1000); // Adjust the delay as needed
       }
     }
   };
 
-  const handleSendBtnPress = (event) => {
+  const handleSendBtnPress = async (event) => {
     event.preventDefault();
     if (message.trim() !== "") {
       console.log(message);
-      sendMessage(message, "user"); // Send user message to chatHistory
+      addMessageToHistory(message, "user");
       setMessage("");
 
-      // Simulate bot response after a delay
-      setTimeout(() => {
-        const botMessage = getBotResponse();
+      try {
+        const botMessage = await getBotResponse(message);
         console.log(botMessage);
-        sendMessage(botMessage, "bot"); // Send bot response to chatHistory
-      }, 9000); // Adjust the delay as needed
+        addMessageToHistory(botMessage, "bot");
+      } catch (error) {
+        console.error("Error fetching bot response:", error);
+        addMessageToHistory("Something went wrong", "bot");
+      }
     }
   };
+
+  // const handleKeyPress = (event) => {
+  //   if (event.key === "Enter") {
+  //     event.preventDefault();
+  //     if (message.trim() !== "") {
+  //       console.log(message);
+  //       addMessageToHistory(message, "user"); // Send user message to chatHistory
+  //       setMessage("");
+  //       setIsWaitingForBot(true); // Activate waiting for bot
+
+  //       // Simulate bot response after a delay
+  //       setTimeout(() => {
+  //         const botMessage = getBotResponse();
+  //         console.log(botMessage);
+  //         addMessageToHistory(botMessage, "bot"); // Send bot response to chatHistory
+  //         setIsWaitingForBot(false);
+  //       }, 1000); // Adjust the delay as needed
+  //     }
+  //   }
+  // };
+
+  // const handleSendBtnPress = (event) => {
+  //   event.preventDefault();
+  //   if (message.trim() !== "") {
+  //     console.log(message);
+  //     addMessageToHistory(message, "user"); // Send user message to chatHistory
+  //     setMessage("");
+
+  //     // Simulate bot response after a delay
+  //     setTimeout(() => {
+  //       const botMessage = getBotResponse();
+  //       console.log(botMessage);
+  //       addMessageToHistory(botMessage, "bot"); // Send bot response to chatHistory
+  //     }, 9000); // Adjust the delay as needed
+  //   }
+  // };
 
   useEffect(() => {
     if (chatHistory.length > 0)
@@ -125,24 +197,30 @@ export default function Landing() {
         {/* showing chatcontainer only if the chatHistory is not empty */}
         {chatHistory.length > 0 && (
           <div ref={chatContainerRef} className='chat-container'>
-            {chatHistory.map((chat, index) => (
-              <div
-                key={index}
-                className={`message rounded-md ${
-                  chat.user === "user" ? "user" : "bot"
-                }`}>
-                <img
-                  className='rounded-sm h-8'
-                  src={
-                    chat.user === "user"
-                      ? "../src/assets/user-dp.png"
-                      : "../src/assets/ziggy-bot.png"
-                  }
-                  alt=''
-                />
-                <div>{chat.message}</div>
-              </div>
-            ))}
+            {chatHistory.map((chat, index) => {
+              return chat.user === "user" ? (
+                <div key={index} className='message rounded-md user'>
+                  <img
+                    className='rounded-sm h-8'
+                    src='../src/assets/user-dp.png'
+                    alt=''
+                  />
+                  <div>{chat.message}</div>
+                </div>
+              ) : (
+                <div key={index} className='message rounded-md bot'>
+                  <img
+                    className='rounded-sm h-8'
+                    src='../src/assets/ziggy-bot.png'
+                    alt=''
+                  />
+                  <div>{chat.message.message}</div>
+                  {chat.message.outfits.map((outfit, index) => (
+                    <Outfit outfit={outfit} />
+                  ))}
+                </div>
+              );
+            })}
           </div>
         )}
         <MessageInput

@@ -6,7 +6,9 @@ from transformers import CLIPProcessor, CLIPModel
 import numpy as np
 from weaviate.util import generate_uuid5
 
-client = weaviate.Client(url="http://localhost:8080")
+client = weaviate.Client(url="https://78f6-136-233-9-98.ngrok-free.app")
+
+
 
 checkpoint = "patrickjohncyh/fashion-clip"
 

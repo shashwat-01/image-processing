@@ -13,10 +13,15 @@ import base64
 import weaviate
 from transformers import CLIPProcessor, CLIPModel
 import helper as h
+from flask_cors import CORS
+
 
 app = flask.Flask(__name__)
 
-@app.route('/query', methods=['GET'])
+CORS(app)
+
+
+@app.route('/query', methods=['POST'])
 def getQuery():
 	query = request.json['query']
 	profile = request.json['profile']
