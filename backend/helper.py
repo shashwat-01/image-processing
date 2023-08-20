@@ -6,7 +6,7 @@ from transformers import CLIPProcessor, CLIPModel
 import numpy as np
 from weaviate.util import generate_uuid5
 
-client = weaviate.Client(url="https://4a4c-136-233-9-98.ngrok-free.app")
+client = weaviate.Client(url="https://db8a-182-79-4-252.ngrok-free.app")
 
 
 

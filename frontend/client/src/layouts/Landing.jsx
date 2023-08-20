@@ -25,6 +25,16 @@ export default function Landing() {
   //   return botResponses[randomIndex];
   // };
 
+  const sendMessage = (text, user) => {
+    setChatHistory((prevChatHistory) => [
+      ...prevChatHistory,
+      {
+        user,
+        message: text,
+      },
+    ]);
+  };
+
   const getBotResponse = async (userMessage) => {
     const response = await fetch("/query", {
       method: "POST",
