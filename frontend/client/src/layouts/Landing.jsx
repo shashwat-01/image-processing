@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import LandingPageQuotes from "../components/LandingPageQuotes";
 import MessageInput from "../components/MessageInput";
+import axios from "axios";
+import Outfit from "./Outfit";
 
 export default function Landing() {
   const botResponses = [
@@ -40,7 +42,7 @@ export default function Landing() {
   //   }, 500); // Simulating a bot response after a short delay
   // };
 
-  const handleKeyPress = (event) => {
+  const handleKeyPress = async (event) =>  {
     if (event.key === "Enter") {
       event.preventDefault();
       if (message.trim() !== "") {
@@ -49,13 +51,20 @@ export default function Landing() {
         setMessage("");
         setIsWaitingForBot(true); // Activate waiting for bot
 
+        const res = await axios.post("http://127.0.0.1:5000/query", {"query": message} , {headers: {'Content-type':'application/json', 
+        'Accept':'application/json'}})
+        sendMessage(res.data, "bot"); // Send bot response to chatHistory
+        setIsWaitingForBot(false); // Deactivate waiting for bot
+        
         // Simulate bot response after a delay
-        setTimeout(() => {
-          const botMessage = getBotResponse();
-          console.log(botMessage);
-          sendMessage(botMessage, "bot"); // Send bot response to chatHistory
-          setIsWaitingForBot(false);
-        }, 1000); // Adjust the delay as needed
+        // setTimeout(() => {
+        //   const botMessage = getBotResponse();
+        //   console.log(botMessage);
+        //   sendMessage(botMessage, "bot"); // Send bot response to chatHistory
+        //   setIsWaitingForBot(false);
+        // }, 1000); // Adjust the delay as needed
+
+
       }
     }
   };
@@ -125,24 +134,35 @@ export default function Landing() {
         {/* showing chatcontainer only if the chatHistory is not empty */}
         {chatHistory.length > 0 && (
           <div ref={chatContainerRef} className='chat-container'>
-            {chatHistory.map((chat, index) => (
-              <div
+            {chatHistory.map((chat, index) => {
+              return (chat.user === "user") ? 
+                (<div
                 key={index}
-                className={`message rounded-md ${
-                  chat.user === "user" ? "user" : "bot"
-                }`}>
+                className="message rounded-md user">
                 <img
                   className='rounded-sm h-8'
-                  src={
-                    chat.user === "user"
-                      ? "../src/assets/user-dp.png"
-                      : "../src/assets/ziggy-bot.png"
-                  }
+                  src="../src/assets/user-dp.png"
                   alt=''
                 />
                 <div>{chat.message}</div>
               </div>
-            ))}
+            ) : (<div
+              key={index}
+              className="message rounded-md bot">
+              <img
+                className='rounded-sm h-8'
+                src="../src/assets/ziggy-bot.png"
+                alt=''
+              />
+              <div>{chat.message.message}</div>
+              {
+                chat.message.outfits.map((outfit, index) => (<Outfit outfit={outfit } />))
+            }
+            </div>
+          )
+            
+            
+            })}
           </div>
         )}
         <MessageInput
