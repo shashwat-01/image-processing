@@ -219,28 +219,37 @@ export default function Landing() {
         {chatHistory.length > 0 && (
           <div ref={chatContainerRef} className='chat-container'>
             {chatHistory.map((chat, index) => {
-              return chat.user === "user" ? (
-                <div key={index} className='message rounded-md user'>
-                  <img
-                    className='rounded-sm h-8'
-                    src='../src/assets/user-dp.png'
-                    alt=''
-                  />
-                  <div>{chat.message}</div>
-                </div>
-              ) : (
-                <div key={index} className='message rounded-md bot'>
-                  <img
-                    className='rounded-sm h-8'
-                    src='../src/assets/ziggy-bot.png'
-                    alt=''
-                  />
-                  <div>{chat.message.message}</div>
-                  {chat.message.outfits.map((outfit, index) => (
-                    <Outfit outfit={outfit} />
-                  ))}
-                </div>
-              );
+              return (chat.user === "user") ? 
+                (<div
+                key={index}
+                className="message rounded-md user">
+                <img
+                  className='rounded-sm h-8'
+                  src="../src/assets/user-dp.png"
+                  alt=''
+                />
+                <div>{chat.message}</div>
+              </div>
+            ) : (<div
+              key={index}
+              className="message rounded-md bot">
+              <img
+                className='rounded-sm h-8'
+                src="../src/assets/ziggy-bot.png"
+                alt=''
+              />
+              <div>
+              <div>{chat.message.message}</div>
+              <div  className="flex flex-row gap-8 my-3">
+              {
+                chat.message.outfits.map((outfit, index) => (<Outfit outfit={outfit } key={index}/>))
+            }
+              </div>
+              </div>
+            </div>
+          )
+            
+            
             })}
           </div>
         )}

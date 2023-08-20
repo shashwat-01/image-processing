@@ -6,7 +6,7 @@ from transformers import CLIPProcessor, CLIPModel
 import numpy as np
 from weaviate.util import generate_uuid5
 
-client = weaviate.Client(url="https://78f6-136-233-9-98.ngrok-free.app")
+client = weaviate.Client(url="https://4a4c-136-233-9-98.ngrok-free.app")
 
 
 
@@ -88,12 +88,17 @@ def getTextEmbeddings(text):
 	outputs = model(**inputs , return_dict=True)
 	return outputs["text_embeds"]
 
-def getTopAndBottomEmbeddings(embeddings):
+def getTopAndBottomEmbeddings(embeddings, gender):
 	response = (
     client.query
     .get("PinterestImages", [ "top {... on PinterestTop {_additional {vector} }}" , "bottom {... on PinterestBottom { _additional {vector} }}"])
     .with_near_vector({"vector" : embeddings.tolist()[0]})
     .with_additional(["vector"])
+    .with_where({
+        "path" : ["category"],
+        "operator" : "Like",
+        "valueText" : gender
+    })
     .with_limit(5)
     .do())
 
@@ -105,7 +110,7 @@ def getTopAndBottomEmbeddings(embeddings):
 def getProducts(embedding, gender, wear):
 	return (
     client.query
-    .get("FlipkartNoSegProducts",["uRL", "brand", "category", "product", "price", "rating", "numberRatings", "colour", "brand", "image", "fit", "type"])
+    .get("FlipkartSegProducts",["uRL", "brand", "category", "product", "price", "rating", "numberRatings", "colour", "brand", "image", "fit", "type"])
     .with_near_vector({"vector" : embedding})
     .with_where({
         "path" : ["category"],
