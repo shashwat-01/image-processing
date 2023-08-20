@@ -88,8 +88,10 @@ export default function Landing() {
         setIsWaitingForBot(true); // Activate waiting for bot
 
         const res = await axios.post(
-          "http://5851-136-233-9-98.ngrok-free.app/query",
-          { query: message },
+          "http://127.0.0.1:5000/query",
+          { query: message,
+            profile: selectedUserProfile
+           },
           {
             headers: {
               "Content-type": "application/json",
@@ -212,7 +214,7 @@ export default function Landing() {
               <option value='Harry'>Harry</option>
               <option value='Hermione'>Hermione</option>
               <option value='Ron'>Ron</option>
-              <option value='Hermione'>Hermione</option>
+              <option value='Ginny'>Ginny</option>
             </select>
           </div>
         )}

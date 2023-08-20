@@ -110,6 +110,7 @@ export default function Outfit({ outfit }) {
 						"module" : "openpose",
 						"model" : "control_v11p_sd15_openpose [cab727d4]",
 						"pixel_perfect": true,
+
 						// "lowvram" : true,
 					  },
 					   {
@@ -118,6 +119,7 @@ export default function Outfit({ outfit }) {
 						"module" : "reference_adain+attn",
 						"pixel_perfect": true,
 						"threshold_a": 0.6,
+						// "control_mode":2,
 					// "weight": 1.2,
 					  },
 			  
@@ -127,6 +129,8 @@ export default function Outfit({ outfit }) {
 						"module" : "reference_adain+attn",
 						"pixel_perfect": true,
 						"threshold_a": 0.6,
+						// "control_mode":2,
+
 					// "weight": 1.2,
 					  }
 					]

@@ -19,18 +19,43 @@ from flask_cors import CORS
 app = flask.Flask(__name__)
 CORS(app )
 
+keyword_dict = {
+	"Harry" : "Mens",
+	"Hermione" : "Girls",
+	"Ron" : "Mens",
+	"Ginny" : "Girls",
+}
+
+model_dict = {
+	"Harry" : "Male",
+	"Hermione" : "Female",
+	"Ron" : "Male",
+	"Ginny" : "Female",
+}
+
+profile_dict = {
+	"Harry" : "Male Profile 1",
+	"Hermione" : "Female Profile 1",
+	"Ron" : "Male Profile 2",
+	"Ginny" : "Female Profile 2",
+}
 
 @app.route('/query', methods=['POST'])
 def getQuery():
 	query = request.json['query']
-	# profile = request.json['profile']
+	profile = request.json['profile']
+
+	keyword = keyword_dict[profile]
+	profile_id = profile_dict[profile]
+
+	
 
 	embedding = h.getTextEmbeddings(query)
-	top_embedding , bottom_embedding = h.getTopAndBottomEmbeddings(embedding , "Girls")
-	top_products = h.getProducts(top_embedding, "Girls", "Tops")
-	bottom_products = h.getProducts(bottom_embedding, "Girls", "Bottoms")
-	ranking_top = h.getRanking(embedding.tolist()[0] , top_products["data"]["Get"]["FlipkartSegProducts"] , "Female Profile 1 Top") 
-	ranking_bottom = h.getRanking(embedding.tolist()[0] , bottom_products["data"]["Get"]["FlipkartSegProducts"] , "Female Profile 1 Bottom") 
+	top_embedding , bottom_embedding = h.getTopAndBottomEmbeddings(embedding , keyword)
+	top_products = h.getProducts(top_embedding, keyword, "Tops")
+	bottom_products = h.getProducts(bottom_embedding, keyword, "Bottoms")
+	ranking_top = h.getRanking(embedding.tolist()[0] , top_products["data"]["Get"]["FlipkartSegProducts"] , f"{profile_id} Top") 
+	ranking_bottom = h.getRanking(embedding.tolist()[0] , bottom_products["data"]["Get"]["FlipkartSegProducts"] , f"{profile_id} Bottom") 
 
 	top3top  = []
 	for key, value in ranking_top.items():
@@ -55,7 +80,7 @@ def getQuery():
 	}
 
 	outfits = []
-	gender = "female"
+	gender = model_dict[profile]
 	for i in range(min(len(top3bottom) , len(top3top))):
 		top_title = top3top[i]["product"]
 		bottom_title = top3bottom[i]["product"]
