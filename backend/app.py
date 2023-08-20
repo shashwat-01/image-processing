@@ -54,14 +54,14 @@ def getQuery():
 	top_embedding , bottom_embedding = h.getTopAndBottomEmbeddings(embedding , keyword)
 	top_products = h.getProducts(top_embedding, keyword, "Tops")
 	bottom_products = h.getProducts(bottom_embedding, keyword, "Bottoms")
-	ranking_top = h.getRanking(embedding.tolist()[0] , top_products["data"]["Get"]["FlipkartSegProducts"] , f"{profile_id} Top") 
-	ranking_bottom = h.getRanking(embedding.tolist()[0] , bottom_products["data"]["Get"]["FlipkartSegProducts"] , f"{profile_id} Bottom") 
+	ranking_top = h.getRanking(embedding.tolist()[0] , top_products["data"]["Get"]["FlipkartCleanProducts"] , f"{profile_id} Top") 
+	ranking_bottom = h.getRanking(embedding.tolist()[0] , bottom_products["data"]["Get"]["FlipkartCleanProducts"] , f"{profile_id} Bottom") 
 
 	top3top  = []
 	for key, value in ranking_top.items():
 		try:
 			if key == 3: break
-			top3top.append(top_products["data"]["Get"]["FlipkartSegProducts"][value])
+			top3top.append(top_products["data"]["Get"]["FlipkartCleanProducts"][value])
 			
 		except:
 			pass
@@ -70,7 +70,7 @@ def getQuery():
 	for key, value in ranking_top.items():
 		try:
 			if key == 3: break
-			top3bottom.append(bottom_products["data"]["Get"]["FlipkartSegProducts"][value])
+			top3bottom.append(bottom_products["data"]["Get"]["FlipkartCleanProducts"][value])
 			
 		except:
 			pass
@@ -84,8 +84,10 @@ def getQuery():
 	for i in range(min(len(top3bottom) , len(top3top))):
 		top_title = top3top[i]["product"]
 		bottom_title = top3bottom[i]["product"]
+		top_color = top3top[i]["colour"]
+		bottom_color = top3bottom[i]["colour"]
 		outfit = {
-			"prompt" : f"full-body potrait of {gender} model wearing {top_title} and {bottom_title} having white background day lighting 2k resolution",
+			"prompt" : f"full-body potrait of {gender} model wearing {top_title} with colour {top_colour} and {bottom_title} with having {bottom_color}having white background day lighting 2k resolution",
 			"top" : {"title" : top_title, "image" : top3top[i]["image"] , "price" : top3top[i]["price"] , "link" : top3top[i]["uRL"]},
 			"bottom" : {"title" : bottom_title , "image" : top3bottom[i]["image"] , "price" : top3bottom[i]["price"] , "link" : top3bottom[i]["uRL"]}
 		}

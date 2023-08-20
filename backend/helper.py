@@ -6,7 +6,7 @@ from transformers import CLIPProcessor, CLIPModel
 import numpy as np
 from weaviate.util import generate_uuid5
 
-client = weaviate.Client(url="http://localhost:8080")
+client = weaviate.Client(url="https://db8a-182-79-4-252.ngrok-free.app")
 
 
 
@@ -110,7 +110,7 @@ def getTopAndBottomEmbeddings(embeddings, gender):
 def getProducts(embedding, gender, wear):
 	return (
     client.query
-    .get("FlipkartSegProducts",["uRL", "brand", "category", "product", "price", "rating", "numberRatings", "colour", "brand", "image", "fit", "type"])
+    .get("FlipkartCleanProducts",["uRL", "brand", "category", "product", "price", "rating", "numberRatings", "colour", "brand", "image", "fit", "type"])
     .with_near_vector({"vector" : embedding})
     .with_where({
         "path" : ["category"],

@@ -88,7 +88,7 @@ export default function Outfit({ outfit }) {
   useEffect( () => {
 
 	const callback = async () => {
-		const url = "https://b7c47e67cb9989e84d.gradio.live"
+		const url = "https://36e3fe77157c36b610.gradio.live"
 		
 		const randomIndex = Math.floor(Math.random() * models.length);
 		console.log(models[randomIndex].image)
@@ -99,9 +99,9 @@ export default function Outfit({ outfit }) {
 			
 				// "denoising_strength": 0.7,
 				  "prompt": outfit.prompt,
-				  "negative_prompt": "(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime:1.4), text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck" ,
+				  "negative_prompt": "(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime:1.4 , gloomy and dark), text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck, gloomy and dark" ,
 				  "steps": 20 ,
-				  "sampler_name": "Euler",
+				//   "sampler_name": "Euler",
 				  "alwayson_scripts": {
 				  "controlnet": {
 					"args": [
@@ -110,6 +110,7 @@ export default function Outfit({ outfit }) {
 						"module" : "openpose",
 						"model" : "control_v11p_sd15_openpose [cab727d4]",
 						"pixel_perfect": true,
+						"weight" : 0.5,
 
 						// "lowvram" : true,
 					  },
@@ -118,9 +119,9 @@ export default function Outfit({ outfit }) {
 						"input_image": outfit.top.image, 
 						"module" : "reference_adain+attn",
 						"pixel_perfect": true,
-						"threshold_a": 0.6,
+						// "threshold_a": 0.6,
 						// "control_mode":2,
-					// "weight": 1.2,
+					"weight": 1.2,
 					  },
 			  
 					  {
@@ -128,10 +129,10 @@ export default function Outfit({ outfit }) {
 						"input_image": outfit.bottom.image, 
 						"module" : "reference_adain+attn",
 						"pixel_perfect": true,
-						"threshold_a": 0.6,
+						// "threshold_a": 0.6,
 						// "control_mode":2,
 
-					// "weight": 1.2,
+					"weight": 1.2,
 					  }
 					]
 				  }
@@ -147,7 +148,8 @@ export default function Outfit({ outfit }) {
 	  }
 	
 	if (!effectRan.current) {
-		callback()
+		
+		callback().catch(() => {callback()})
 	}
 
 	return () => effectRan.current = true;
