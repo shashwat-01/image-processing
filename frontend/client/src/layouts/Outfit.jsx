@@ -1,7 +1,8 @@
 import axios from "axios";
 import { useState,useEffect, useRef } from "react";
+import models from "../model.json"
 
-function Modal({ outfit, closeModal }) {
+function Modal({ outfit, closeModal , image}) {
 	useEffect(() => {
 	  document.body.classList.add("overflow-hidden"); // Prevent scrolling when modal is open
   
@@ -41,7 +42,7 @@ function Modal({ outfit, closeModal }) {
 			</button>
 			<div className="h-5/6 w-full overflow-hidden flex flex-row gap-10">
 			  <img
-				src={`data:image/jpeg;base64,${outfit.top.image}`}
+				src={`data:image/jpeg;base64,${image}`}
 				alt="Outfit Image"
 				className="h-96"
 			  />
@@ -87,8 +88,12 @@ export default function Outfit({ outfit }) {
   useEffect( () => {
 
 	const callback = async () => {
-		const url = "https://2fe2875eeeec1758e5.gradio.live"
+		const url = "https://b7c47e67cb9989e84d.gradio.live"
 		
+		const randomIndex = Math.floor(Math.random() * models.length);
+		console.log(models[randomIndex].image)
+		console.log(outfit.prompt)
+    	
 	
 		const payload = {
 			
@@ -96,31 +101,32 @@ export default function Outfit({ outfit }) {
 				  "prompt": outfit.prompt,
 				  "negative_prompt": "(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime:1.4), text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck" ,
 				  "steps": 20 ,
+				  "sampler_name": "Euler",
 				  "alwayson_scripts": {
 				  "controlnet": {
 					"args": [
-					//   {
-					// 	"input_image": img_str3, 
-					// 	"module" : "openpose",
-					// "model" : "control_v11p_sd15_openpose [cab727d4]",
-					// 	"pixel_perfect": True,
-					// "weight": 0.5,
-					//   },
+					  {
+						"input_image": models[2].base64, 
+						"module" : "openpose",
+						"model" : "control_v11p_sd15_openpose [cab727d4]",
+						"pixel_perfect": true,
+						// "lowvram" : true,
+					  },
 					   {
-						
+						// "lowvram" : true,
 						"input_image": outfit.top.image, 
 						"module" : "reference_adain+attn",
 						"pixel_perfect": true,
-						"threshold_a": 1,
+						"threshold_a": 0.6,
 					// "weight": 1.2,
 					  },
 			  
 					  {
-						
+						// "lowvram" : true,
 						"input_image": outfit.bottom.image, 
 						"module" : "reference_adain+attn",
 						"pixel_perfect": true,
-						"threshold_a": 1,
+						"threshold_a": 0.6,
 					// "weight": 1.2,
 					  }
 					]
@@ -159,7 +165,7 @@ export default function Outfit({ outfit }) {
         src={`data:image/jpeg;base64,${imgstr}`}
         onClick={openModal}
       />}
-      {modalOpen && <Modal outfit={outfit} closeModal={closeModal} />}
+      {modalOpen && <Modal outfit={outfit} closeModal={closeModal} image={imgstr} />}
     </div>
   );
 }

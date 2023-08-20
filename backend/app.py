@@ -23,10 +23,10 @@ CORS(app )
 @app.route('/query', methods=['POST'])
 def getQuery():
 	query = request.json['query']
-	profile = request.json['profile']
+	# profile = request.json['profile']
 
 	embedding = h.getTextEmbeddings(query)
-	top_embedding , bottom_embedding = h.getTopAndBottomEmbeddings(embedding)
+	top_embedding , bottom_embedding = h.getTopAndBottomEmbeddings(embedding , "Girls")
 	top_products = h.getProducts(top_embedding, "Girls", "Tops")
 	bottom_products = h.getProducts(bottom_embedding, "Girls", "Bottoms")
 	ranking_top = h.getRanking(embedding.tolist()[0] , top_products["data"]["Get"]["FlipkartSegProducts"] , "Female Profile 1 Top") 
