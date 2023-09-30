@@ -12,12 +12,12 @@ export default function MessageInput({
   const textareaRef = useRef(null);
 
   return (
-    <div className='w-full'>
+    <div className="w-full">
       <form>
-        <div className='flex border-b-2 border-gray-600 border-solid py-2'>
+        <div className="flex border-b-2 border-gray-600 border-solid py-2 my-4">
           <textarea
             ref={textareaRef} // Attach the ref to the textarea
-            name='prompt'
+            name="prompt"
             disabled={disableInput}
             value={message}
             onChange={(e) => {
@@ -30,20 +30,23 @@ export default function MessageInput({
                 handleKeyPress(e);
               }
             }}
-            id=''
-            cols='1'
-            rows='1'
-            className='w-full whitespace-nowrap overflow-x-auto focus:outline-none resize-none'
+            id=""
+            cols="1"
+            rows="1"
+            className="w-full whitespace-nowrap overflow-x-auto focus:outline-none resize-none bg-emerald-900 text-white rounded-lg mr-2 px-4 py-1
+            "
             style={{
               fontFamily: "Colfax",
               fontSize: `${textsize}`,
             }}
-            placeholder='What vibe are you feeling today?'></textarea>
+            placeholder="What vibe are you feeling today?"
+          ></textarea>
           <button
-            type='button'
+            type="button"
             onClick={handleSendBtnPress}
-            disabled={disableInput}>
-            <img src='../src/assets/submit-arrow.svg' alt='' />
+            disabled={disableInput}
+          >
+            <img src="../src/assets/submit-arrow.svg" alt="" />
           </button>
         </div>
       </form>

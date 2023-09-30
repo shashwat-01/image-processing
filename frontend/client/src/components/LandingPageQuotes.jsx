@@ -42,11 +42,18 @@ export default function LandingPageQuotes() {
   }, []);
 
   return (
-    <div className=''>
-      <div className=''>
-        <p className='text-5xl quote-display'>{randomQuote.quote}</p>
-        <p className='text-gray-800 text-3xl' style={{ fontWeight: "lighter" }}>
-          {randomQuote.author}
+    <div className="">
+      <div className="">
+        <p>
+          <span className="text-4xl quote-display mr-4">
+            {randomQuote.quote}
+          </span>
+          <span
+            className="text-gray-400 text-xl"
+            style={{ fontWeight: "lighter" }}
+          >
+            ~{randomQuote.author}
+          </span>
         </p>
       </div>
     </div>

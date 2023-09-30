@@ -13,7 +13,7 @@ const LoadingComponent = () => {
   }, []);
 
   return (
-    <div className='text-xl w-48 text-[#646668] border-2 border-[#646668] px-4 py-2 rounded'>
+    <div className="text-xl w-48 bg-slate-200 text-black border-2 border-gray-700 px-4 py-2 rounded-lg">
       Brewing Styles{dots}
     </div>
   );
